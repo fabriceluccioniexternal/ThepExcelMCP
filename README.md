@@ -18,6 +18,7 @@ and screenshots so the AI can *see* what it built.
 [![MCP](https://img.shields.io/badge/Model_Context_Protocol-server-8A2BE2)](https://modelcontextprotocol.io)
 
 [Quick start](#quick-start--hand-it-to-your-ai-agent) ·
+[Fork changes](#fork-extension--live-rowcolumn-deletion) ·
 [Why live COM?](#why-a-live-excel-not-a-file-library) ·
 [Tools](#the-26-tools) ·
 [Install](#install) ·
@@ -27,6 +28,44 @@ and screenshots so the AI can *see* what it built.
 </div>
 
 ---
+
+## Fork extension — live row/column deletion
+
+This fork adds `excel_range(action="delete_rows")` and
+`excel_range(action="delete_columns")` on the branch
+[`feat/delete-excel-rows-columns`](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/feat/delete-excel-rows-columns).
+The change is proposed upstream in [PR #13](https://github.com/ThepExcel/ThepExcelMCP/pull/13).
+The comparison below uses upstream `main` at
+[`bd3aac3`](https://github.com/ThepExcel/ThepExcelMCP/commit/bd3aac3e188c3f1277f8694b12b00c128db773db),
+checked on 2026-10-09; it does not assume that future upstream versions lack these actions.
+
+| Operation | Upstream `main` at `bd3aac3` | This fork's feature branch |
+|---|---|---|
+| `excel_range(action="clear", range="A2:B4")` | Empties the selected cells; keeps their formatting and position | Same behavior |
+| `excel_range(action="delete_rows", range="A2:B4")` | Unsupported action | Removes entire rows 2–4, including cells outside columns A–B; lower rows move up |
+| `excel_range(action="delete_columns", range="B2:D4")` | Unsupported action | Removes entire columns B–D, including cells outside rows 2–4; columns to their right move left |
+| Disjoint/overlapping deletion selections | Unsupported | Accepts `2:4,9:9` or `B:D,G:G`; merges overlapping/adjacent intervals before deleting |
+
+The existing tool parameters and workbook/sheet targeting rules stay the same. Excel
+adjusts references using its native deletion behavior. The workbook stays open and is
+**not automatically saved**. A multi-block operation can partially succeed; errors
+identify the original intervals already removed.
+
+**Lire le guide en français : [Suppression de lignes et de colonnes — différence avec main](docs/suppression-lignes-colonnes.md).**
+It includes examples, before/after data, the response format, targeting rules and failure handling.
+
+To install this extension, use the feature branch explicitly:
+
+```powershell
+git clone --branch feat/delete-excel-rows-columns https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
+cd ThepExcelMCP
+uv sync --frozen
+```
+
+Register the MCP server against this checkout using the client instructions below,
+then restart it. The upstream installation/release links elsewhere in this README
+refer to the original project; its release bundle and this fork's unchanged `main`
+do not include this extension at the comparison revision.
 
 ## What is this?
 
