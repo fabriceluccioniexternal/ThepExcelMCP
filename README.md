@@ -118,7 +118,7 @@ example-rich docstrings that serve as the LLM-facing API.
 |---|---|
 | `excel_workbook` | `list`, `info`, `open`, `save`, `close`, `create`, `save_as` |
 | `excel_sheet` | `list`, `add`, `rename`, `delete` |
-| `excel_range` | `read` (paginated, spill metadata, `value_mode=typed\|raw`), `read_spill`, `write`, `write_formula` (Formula2 / dynamic arrays), `write_py` (`=PY()`, experimental), `clear` |
+| `excel_range` | `read` (paginated, spill metadata, `value_mode=typed\|raw`), `read_spill`, `write`, `write_formula` (Formula2 / dynamic arrays), `write_py` (`=PY()`, experimental), `clear`, `delete_rows`, `delete_columns` |
 | `excel_table` | `list`, `create`, `read` (paginated, `value_mode=typed\|raw`), `append_rows` (single-resize fast path with safe insertion fallback), `add_column` (with formula), `sort`, `filter`, `set_style`, `toggle_totals`, `rename`, `delete` |
 | `excel_powerquery` | `list`, `get`, `create`, `update`, `delete`, `refresh`, `refresh_all`, `load_to_table`, `load_to_datamodel`, `analyze`, `analyze_raw`, `create_parameter`, `get_parameter`, `set_parameter`, `list_parameters` |
 | `excel_pivot` | `list`, `create` (range/table/datamodel source), `add_field` (aggregation + number format), `remove_field`, `move_field`, `set_layout`, `refresh`, `delete`, `read` (paginated, `value_mode=typed\|raw`) |
@@ -144,6 +144,21 @@ example-rich docstrings that serve as the LLM-facing API.
 | `excel_vba` | `list_modules`, `get_module`, `write_module`, `delete_module`, `run` (opt-in, see [Safety](#safety-model)) |
 
 Structured references work naturally: `excel_range(action="read", range="Orders[Amount]")`.
+
+Delete whole worksheet rows or columns in an open workbook:
+
+```python
+excel_range(action="delete_rows", range="2:4,9:9", sheet="Data", workbook="Test.xlsx")
+excel_range(action="delete_columns", range="B:D,G:G", sheet="Data", workbook="Test.xlsx")
+```
+
+Cell ranges also work: deleting rows for `A2:B4,C9` removes all of rows 2-4
+and 9, including cells outside the selected columns. Overlapping intervals are
+merged, then removed from highest index to lowest so disjoint selections retain
+their original indices. Excel shifts cells and adjusts references. The response
+reports the workbook, sheet, axis, original intervals and deleted count under
+`deleted`. The workbook is not saved. Multi-block deletion is not atomic: an
+error reports any intervals already removed.
 
 </details>
 
@@ -381,13 +396,13 @@ uv sync --frozen                                              # install exactly 
 uv run pytest -q                                              # 1000+ unit tests — mocked COM, no Excel needed
 uv run ruff check src scripts --select E9,F                  # syntax/import/static checks
 uv run python tests/smoke_com.py                              # live COM smoke suite (Windows + Excel)
-uv run python tests/smoke_com.py --sections 1,2,3,4           # subset (sections 1–28)
+uv run python tests/smoke_com.py --sections 1,2,3,4           # subset (sections 1–29)
 uv run --isolated --with mcp==2.0.0 python tests/protocol_smoke_v2.py  # real stdio handshake
 uv run python scripts/build_mcpb.py                           # build dist/thepexcel-mcp.mcpb
 ```
 
 The live smoke suite performs real read-back verification against a running Excel (it launches
-its own instance) and takes roughly 5–10 minutes for all 28 sections.
+its own instance) and takes roughly 5–10 minutes for all 29 sections.
 
 Project layout, in brief:
 
