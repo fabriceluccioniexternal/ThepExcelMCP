@@ -1,17 +1,15 @@
 # Suppression de lignes et de colonnes dans Excel ouvert
 
-Le [`main` de ce fork](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/main) inclut deux actions ajoutées à l'outil existant `excel_range` : `delete_rows` et `delete_columns`. Elles agissent immédiatement dans un classeur ouvert dans Excel Desktop sous Windows. Aucun paramètre de l'outil n'est ajouté. La branche `feat/delete-excel-rows-columns` est conservée pour la proposition d'intégration au projet source.
+L'outil `excel_range` propose deux actions pour supprimer des lignes ou des colonnes entières : `delete_rows` et `delete_columns`. Elles agissent immédiatement dans un classeur ouvert dans Excel Desktop sous Windows, avec les mêmes paramètres de plage, de feuille et de classeur que les autres actions de l'outil.
 
-La comparaison porte sur le `main` du projet source au commit [`bd3aac3`](https://github.com/ThepExcel/ThepExcelMCP/commit/bd3aac3e188c3f1277f8694b12b00c128db773db), vérifié le 9 octobre 2026. La proposition d'intégration est la [pull request #13](https://github.com/ThepExcel/ThepExcelMCP/pull/13). Les versions futures de `main` peuvent évoluer.
+## Choisir l'opération
 
-## Ce que le fork ajoute au main du projet source
-
-| Besoin | `main` source au commit de référence | `main` du fork |
+| Besoin | Action | Effet |
 |---|---|---|
-| Vider des cellules | `clear` efface les valeurs et formules sélectionnées | Même comportement |
-| Supprimer des lignes entières | `delete_rows` est une action inconnue | Supprime les lignes et remonte les données situées en dessous |
-| Supprimer des colonnes entières | `delete_columns` est une action inconnue | Supprime les colonnes et déplace vers la gauche celles situées à droite |
-| Supprimer plusieurs blocs en un appel | Pas d'action de suppression de lignes/colonnes dans `excel_range` | Accepte une sélection composée de plusieurs blocs sur une seule feuille |
+| Vider des cellules | `clear` | Efface les valeurs et formules sélectionnées ; conserve la grille et les formats |
+| Supprimer des lignes entières | `delete_rows` | Retire les lignes et remonte les données situées en dessous |
+| Supprimer des colonnes entières | `delete_columns` | Retire les colonnes et déplace vers la gauche celles situées à droite |
+| Supprimer plusieurs blocs en un appel | `delete_rows` ou `delete_columns` | Accepte plusieurs blocs sur une seule feuille et fusionne les chevauchements |
 
 Les autres outils ne sont pas remplacés : `excel_sheet(action="delete")` supprime une feuille et `excel_table(action="delete")` retire un objet Table selon ses options. Ces opérations ont une portée différente de la suppression de lignes ou de colonnes de la feuille.
 
@@ -99,9 +97,9 @@ Une plage vide ou invalide empêche la suppression. Les erreurs COM, par exemple
 
 Le classeur reste ouvert et **aucune sauvegarde automatique n'est effectuée**. Pour conserver les changements sur disque, utilisez ensuite explicitement `excel_workbook(action="save", workbook="Test.xlsx")`.
 
-## Installer la bonne branche
+## Installation
 
-Les suppressions sont incluses dans le `main` de ce fork. Pour les installer :
+Installez le serveur depuis la branche `main` :
 
 ```powershell
 git clone --branch main https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
@@ -109,7 +107,7 @@ cd ThepExcelMCP
 uv sync --frozen
 ```
 
-Configurez votre client MCP pour lancer ce répertoire selon les [instructions du README](../README.md#fr-installation), puis redémarrez le serveur. Une installation éditable ne recharge pas un processus déjà démarré. Les publications du projet source désignent la version officielle ; son bundle au commit de référence n'inclut pas cette extension. Pour inclure les suppressions dans un bundle, construisez-le depuis le clone du fork avec `uv run python scripts/build_mcpb.py`.
+Configurez votre client MCP pour lancer ce répertoire selon les [instructions du README](../README.md#fr-installation), puis redémarrez le serveur. Une installation éditable ne recharge pas un processus déjà démarré. Pour une installation par bundle dans Claude Desktop, construisez-le depuis ce répertoire avec `uv run python scripts/build_mcpb.py`.
 
 ## Validation de l'implémentation
 
