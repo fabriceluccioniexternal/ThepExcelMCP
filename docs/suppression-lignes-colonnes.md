@@ -1,12 +1,12 @@
 # Suppression de lignes et de colonnes dans Excel ouvert
 
-La branche [`feat/delete-excel-rows-columns`](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/feat/delete-excel-rows-columns) de ce fork ajoute deux actions à l'outil existant `excel_range` : `delete_rows` et `delete_columns`. Elles agissent immédiatement dans un classeur ouvert dans Excel Desktop sous Windows. Aucun paramètre de l'outil n'est ajouté.
+Le [`main` de ce fork](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/main) inclut deux actions ajoutées à l'outil existant `excel_range` : `delete_rows` et `delete_columns`. Elles agissent immédiatement dans un classeur ouvert dans Excel Desktop sous Windows. Aucun paramètre de l'outil n'est ajouté. La branche `feat/delete-excel-rows-columns` est conservée pour la proposition d'intégration au projet source.
 
 La comparaison porte sur le `main` du projet source au commit [`bd3aac3`](https://github.com/ThepExcel/ThepExcelMCP/commit/bd3aac3e188c3f1277f8694b12b00c128db773db), vérifié le 9 octobre 2026. La proposition d'intégration est la [pull request #13](https://github.com/ThepExcel/ThepExcelMCP/pull/13). Les versions futures de `main` peuvent évoluer.
 
-## Ce que le fork ajoute à main
+## Ce que le fork ajoute au main du projet source
 
-| Besoin | `main` au commit de référence | Branche de fonctionnalité du fork |
+| Besoin | `main` source au commit de référence | `main` du fork |
 |---|---|---|
 | Vider des cellules | `clear` efface les valeurs et formules sélectionnées | Même comportement |
 | Supprimer des lignes entières | `delete_rows` est une action inconnue | Supprime les lignes et remonte les données situées en dessous |
@@ -101,15 +101,15 @@ Le classeur reste ouvert et **aucune sauvegarde automatique n'est effectuée**. 
 
 ## Installer la bonne branche
 
-Le `main` de ce fork est conservé au niveau du projet source. Pour obtenir les suppressions, clonez la branche de fonctionnalité :
+Les suppressions sont incluses dans le `main` de ce fork. Pour les installer :
 
 ```powershell
-git clone --branch feat/delete-excel-rows-columns https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
+git clone --branch main https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
 cd ThepExcelMCP
 uv sync --frozen
 ```
 
-Configurez votre client MCP pour lancer ce répertoire selon les [instructions du README](../README.md#install), puis redémarrez le serveur. Une installation éditable ne recharge pas un processus déjà démarré. Les liens d'installation et de publication du projet source présents dans le README désignent la version officielle ; son bundle au commit de référence n'inclut pas cette extension.
+Configurez votre client MCP pour lancer ce répertoire selon les [instructions du README](../README.md#fr-installation), puis redémarrez le serveur. Une installation éditable ne recharge pas un processus déjà démarré. Les publications du projet source désignent la version officielle ; son bundle au commit de référence n'inclut pas cette extension. Pour inclure les suppressions dans un bundle, construisez-le depuis le clone du fork avec `uv run python scripts/build_mcpb.py`.
 
 ## Validation de l'implémentation
 

@@ -37,15 +37,16 @@ des mesures DAX évaluées par Excel et des captures pour que l’IA puisse *voi
 
 ## Extension du fork : supprimer des lignes ou des colonnes en direct
 
-Ce fork ajoute `excel_range(action="delete_rows")` et
-`excel_range(action="delete_columns")` sur la branche
-[`feat/delete-excel-rows-columns`](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/feat/delete-excel-rows-columns).
+Le `main` de ce fork inclut `excel_range(action="delete_rows")` et
+`excel_range(action="delete_columns")`. La branche
+[`feat/delete-excel-rows-columns`](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/feat/delete-excel-rows-columns)
+est conservée pour la proposition d’intégration au projet source.
 L’intégration au projet source est proposée dans la [PR #13](https://github.com/ThepExcel/ThepExcelMCP/pull/13).
 La comparaison ci-dessous porte sur le `main` source au commit
 [`bd3aac3`](https://github.com/ThepExcel/ThepExcelMCP/commit/bd3aac3e188c3f1277f8694b12b00c128db773db),
 vérifié le 9 octobre 2026. Elle ne présume pas du contenu des futures versions du projet source.
 
-| Opération | `main` source à `bd3aac3` | Branche de fonctionnalité de ce fork |
+| Opération | `main` source à `bd3aac3` | `main` de ce fork |
 |---|---|---|
 | `excel_range(action="clear", range="A2:B4")` | Vide les cellules sélectionnées ; conserve leur format et leur position | Même comportement |
 | `excel_range(action="delete_rows", range="A2:B4")` | Action non prise en charge | Supprime les lignes 2 à 4 entières, y compris hors des colonnes A–B ; les lignes suivantes remontent |
@@ -60,17 +61,18 @@ les erreurs précisent les intervalles d’origine déjà supprimés.
 **Guide détaillé : [Suppression de lignes et de colonnes — différence avec main](docs/suppression-lignes-colonnes.md).**
 Il présente des exemples, les données avant/après, le format de réponse, les règles de ciblage et les erreurs.
 
-Pour installer cette extension, choisissez explicitement la branche de fonctionnalité :
+Pour installer le fork avec les suppressions, utilisez sa branche `main` :
 
 ```powershell
-git clone --branch feat/delete-excel-rows-columns https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
+git clone --branch main https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
 cd ThepExcelMCP
 uv sync --frozen
 ```
 
 Enregistrez le serveur MCP en utilisant ce répertoire selon les instructions du client ci-dessous,
-puis redémarrez-le. Les autres liens d’installation et de publication de ce README concernent le projet source ;
-son bundle et le `main` inchangé de ce fork ne contiennent pas cette extension au commit de référence.
+puis redémarrez-le. Les publications du projet source concernent sa version officielle ;
+son bundle au commit de référence ne contient pas cette extension. Pour un bundle incluant
+les suppressions, construisez-le depuis ce clone du fork avec `scripts/build_mcpb.py`.
 
 ## Présentation
 
@@ -98,11 +100,10 @@ de configurer le serveur. Il lira ce README et pourra l’enregistrer **pour vot
 (tous les projets) ou **pour un projet** uniquement. ❤️
 
 ```
-https://github.com/ThepExcel/ThepExcelMCP
+https://github.com/fabriceluccioniexternal/ThepExcelMCP
 ```
 
-Pour les suppressions ajoutées dans ce fork, donnez plutôt le lien de la
-[branche de fonctionnalité](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/feat/delete-excel-rows-columns).
+Le `main` de ce fork comprend les suppressions de lignes et de colonnes.
 
 Une fois le serveur enregistré, vous pouvez demander à votre agent :
 
@@ -227,11 +228,10 @@ n’est pas atomique : une erreur précise les intervalles déjà supprimés.
 
 ## Installation
 
-Ces commandes installent le projet source. Pour les suppressions de ce fork, utilisez les
-[commandes de sa branche de fonctionnalité](#fr-fork).
+Ces commandes installent le `main` de ce fork, avec les suppressions de lignes et de colonnes.
 
 ```powershell
-git clone https://github.com/ThepExcel/ThepExcelMCP.git
+git clone --branch main https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
 cd ThepExcelMCP
 uv sync
 ```
@@ -511,15 +511,16 @@ and screenshots so the AI can *see* what it built.
 
 ## Fork extension — live row/column deletion
 
-This fork adds `excel_range(action="delete_rows")` and
-`excel_range(action="delete_columns")` on the branch
-[`feat/delete-excel-rows-columns`](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/feat/delete-excel-rows-columns).
+This fork's `main` includes `excel_range(action="delete_rows")` and
+`excel_range(action="delete_columns")`. The
+[`feat/delete-excel-rows-columns`](https://github.com/fabriceluccioniexternal/ThepExcelMCP/tree/feat/delete-excel-rows-columns)
+branch is retained for the upstream proposal.
 The change is proposed upstream in [PR #13](https://github.com/ThepExcel/ThepExcelMCP/pull/13).
 The comparison below uses upstream `main` at
 [`bd3aac3`](https://github.com/ThepExcel/ThepExcelMCP/commit/bd3aac3e188c3f1277f8694b12b00c128db773db),
 checked on 2026-10-09; it does not assume that future upstream versions lack these actions.
 
-| Operation | Upstream `main` at `bd3aac3` | This fork's feature branch |
+| Operation | Upstream `main` at `bd3aac3` | This fork's `main` |
 |---|---|---|
 | `excel_range(action="clear", range="A2:B4")` | Empties the selected cells; keeps their formatting and position | Same behavior |
 | `excel_range(action="delete_rows", range="A2:B4")` | Unsupported action | Removes entire rows 2–4, including cells outside columns A–B; lower rows move up |
@@ -534,18 +535,19 @@ identify the original intervals already removed.
 **Lire le guide en français : [Suppression de lignes et de colonnes — différence avec main](docs/suppression-lignes-colonnes.md).**
 It includes examples, before/after data, the response format, targeting rules and failure handling.
 
-To install this extension, use the feature branch explicitly:
+To install this fork with row/column deletion, use its `main` branch:
 
 ```powershell
-git clone --branch feat/delete-excel-rows-columns https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
+git clone --branch main https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
 cd ThepExcelMCP
 uv sync --frozen
 ```
 
 Register the MCP server against this checkout using the client instructions below,
-then restart it. The upstream installation/release links elsewhere in this README
-refer to the original project; its release bundle and this fork's unchanged `main`
-do not include this extension at the comparison revision.
+then restart it. Upstream releases refer to the original project's official version;
+its release bundle does not include this extension at the comparison revision.
+For a bundle that includes deletion, build it from this fork checkout with
+`scripts/build_mcpb.py`.
 
 ## What is this?
 
@@ -573,7 +575,7 @@ over — it will read this README and set the MCP server up for you, as either *
 > 🇹🇭 แค่ส่งลิงก์ GitHub นี้ให้ AI Agent ของคุณ แล้วบอกให้ AI จัดการต่อได้เลย จะลง MCP เป็น User Scope หรือ Project Scope ก็ได้ ❤️
 
 ```
-https://github.com/ThepExcel/ThepExcelMCP
+https://github.com/fabriceluccioniexternal/ThepExcelMCP
 ```
 
 Once registered, just talk to your agent. Things you can say:
@@ -697,8 +699,10 @@ error reports any intervals already removed.
 
 ## Install
 
+These commands install this fork's `main`, including row/column deletion.
+
 ```powershell
-git clone https://github.com/ThepExcel/ThepExcelMCP.git
+git clone --branch main https://github.com/fabriceluccioniexternal/ThepExcelMCP.git
 cd ThepExcelMCP
 uv sync
 ```
